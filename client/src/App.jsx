@@ -5,7 +5,7 @@ function App() {
   const [artists, setArtists] = useState([])
 
   const getArtists = async () => {
-    await fetch('http://localhost:3000/artists').then((response) => {
+    await fetch('https://d3haiuftxr26lv.cloudfront.net/artists').then((response) => {
       if (response.ok) {
         return response.json()
       } 
