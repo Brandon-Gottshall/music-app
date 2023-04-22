@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [artists, setArtists] = useState([])
+
+  const getArtists = async () => {
+    await fetch('http://localhost:3000/artists').then((response) => {
+      if (response.ok) {
+        return response.json()
+      } 
+    }).then((jsonResponse) => {
+      console.log('response: ', jsonResponse)
+      setArtists(jsonResponse)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+  
+  useEffect(() => {
+    getArtists()
+  }, [])
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="app">
+      <h1>Artists</h1>
+        <div className="artistContainer">
+        {
+          artists.map(({name, age}, index) => {
+            return <ArtistCard name={name} age={age} key={index} />
+          })
+        }
+        </div>
     </div>
   )
 }
 
 export default App
+function ArtistCard({ name, age }) {
+  return (
+    <div className="artistCard">
+      <h2>{name}</h2>
+      <p>{age}</p>
+      <img src="https://via.placeholder.com/150" alt="Artist" />
+    </div>
+  )
+}
+
